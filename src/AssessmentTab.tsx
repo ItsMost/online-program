@@ -13,8 +13,8 @@ import {
   Activity,
   RefreshCw,
   XCircle,
-  Flame, // أيقونة للدهون
-  Target, // أيقونة للهدف
+  Flame, 
+  Target, 
 } from 'lucide-react';
 import { calculate5LevelDynamic } from './data';
 
@@ -25,17 +25,16 @@ export default function AssessmentTab({
 }: any) {
   const [editingId, setEditingId] = useState<number | null>(null);
 
-  // 1. تحديث بيانات اللاعب لتشمل بيانات التغذية
   const [playerData, setPlayerData] = useState({
     name: '',
     gender: 'male',
     birthYear: '',
     bodyweight: '',
     sport: 'squash',
-    bodyFat: '', // نسبة الدهون
-    goal: 'maintain', // الهدف: lose, maintain, gain
-    trainingDays: '4', // أيام التمرين في الأسبوع
-    intensity: 'medium', // شدة التمرين
+    bodyFat: '', 
+    goal: 'maintain', 
+    trainingDays: '4', 
+    intensity: 'medium', 
   });
 
   const [testScores, setTestScores] = useState({
@@ -301,7 +300,7 @@ export default function AssessmentTab({
           const oldSnapshot = {
             date: record.date,
             bodyweight: record.playerData.bodyweight,
-            bodyFat: record.playerData.bodyFat, // حفظ نسبة الدهون القديمة برضه
+            bodyFat: record.playerData.bodyFat, 
             testScores: { ...record.testScores },
             fmsTotal: record.analysisReport.fmsTotal,
           };
@@ -336,7 +335,6 @@ export default function AssessmentTab({
     setPlayerData({
       ...record.playerData,
       birthYear: loadedBirthYear || '',
-      // حماية للبيانات القديمة لو مفيش فيها بيانات التغذية
       bodyFat: record.playerData.bodyFat || '',
       goal: record.playerData.goal || 'maintain',
       trainingDays: record.playerData.trainingDays || '4',
@@ -358,39 +356,43 @@ export default function AssessmentTab({
     record.playerData.name.toLowerCase().includes(archiveSearch.toLowerCase())
   );
 
+  // كلاسات الألوان الثابتة للإدخال عشان تشتغل حلو في الفاتح والغامق
+  const inputClass = "w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors font-bold placeholder-slate-400 dark:placeholder-slate-500";
+  const selectClass = "w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors font-bold";
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500 text-right relative z-10">
       <div
         className={`rounded-2xl shadow-sm border p-6 md:p-8 ${theme.card} ${theme.border}`}
       >
-        <div className="flex items-center justify-between mb-8 border-b border-slate-100 pb-4">
+        <div className="flex items-center justify-between mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
           <div className="flex items-center gap-3">
             <Activity className={`w-8 h-8 ${theme.headerIcon}`} />
             <div>
-              <h2 className="text-2xl font-bold text-slate-800">
+              <h2 className={`text-2xl font-bold ${theme.headerText}`}>
                 القياسات والحركة الوظيفية (FMS)
               </h2>
-              <p className="text-slate-500 text-sm">
+              <p className={`text-sm mt-1 ${theme.textDesc}`}>
                 تقييم رياضي وحركي متكامل مع معايير عالمية ديناميكية.
               </p>
             </div>
           </div>
 
           {editingId && (
-            <div className="bg-amber-100 text-amber-700 px-4 py-2 rounded-xl border border-amber-200 font-bold flex items-center gap-2 animate-pulse">
+            <div className="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 px-4 py-2 rounded-xl border border-amber-200 dark:border-amber-700 font-bold flex items-center gap-2 animate-pulse">
               <RefreshCw className="w-5 h-5" />
               أنت الآن تقوم بتحديث أرقام لاعب!
             </div>
           )}
         </div>
 
-        <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 mb-8 shadow-inner text-slate-800">
-          <h3 className="font-bold mb-4 flex items-center gap-2">
-            <User className="w-5 h-5" /> محددات التقييم (Demographics)
+        <div className="bg-slate-50 dark:bg-slate-800/40 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 mb-8 shadow-inner text-slate-800 dark:text-slate-100">
+          <h3 className="font-bold mb-4 flex items-center gap-2 text-slate-800 dark:text-white">
+            <User className="w-5 h-5 text-blue-500" /> محددات التقييم (Demographics)
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
             <div className="md:col-span-2">
-              <label className="block text-xs font-bold mb-1">
+              <label className="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">
                 اسم اللاعب/ة
               </label>
               <input
@@ -399,18 +401,18 @@ export default function AssessmentTab({
                 onChange={(e) =>
                   setPlayerData({ ...playerData, name: e.target.value })
                 }
-                className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:outline-none"
+                className={inputClass}
                 placeholder="الاسم"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold mb-1">الرياضة</label>
+              <label className="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">الرياضة</label>
               <select
                 value={playerData.sport}
                 onChange={(e) =>
                   setPlayerData({ ...playerData, sport: e.target.value })
                 }
-                className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:outline-none bg-purple-50 text-purple-800 font-bold"
+                className={`${selectClass} bg-purple-50 dark:bg-purple-900/20 text-purple-800 dark:text-purple-300 border-purple-200 dark:border-purple-700`}
               >
                 <option value="squash">اسكواش (Squash)</option>
                 <option value="volleyball">كرة طائرة (Volleyball)</option>
@@ -418,23 +420,23 @@ export default function AssessmentTab({
               </select>
             </div>
             <div>
-              <label className="block text-xs font-bold mb-1">الجنس</label>
+              <label className="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">الجنس</label>
               <select
                 value={playerData.gender}
                 onChange={(e) =>
                   setPlayerData({ ...playerData, gender: e.target.value })
                 }
-                className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:outline-none"
+                className={selectClass}
               >
                 <option value="male">ولد (Male)</option>
                 <option value="female">بنت (Female)</option>
               </select>
             </div>
             <div>
-              <label className="block text-xs font-bold mb-1">
+              <label className="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">
                 مواليد سنة{' '}
                 {calculatedAge > 0 && (
-                  <span className="text-blue-600">({calculatedAge} سنة)</span>
+                  <span className="text-blue-600 dark:text-blue-400">({calculatedAge} سنة)</span>
                 )}
               </label>
               <input
@@ -443,12 +445,12 @@ export default function AssessmentTab({
                 onChange={(e) =>
                   setPlayerData({ ...playerData, birthYear: e.target.value })
                 }
-                className="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:outline-none font-bold"
+                className={inputClass}
                 placeholder="مثال: 1998"
               />
             </div>
             <div className="md:col-span-5">
-              <label className="block text-xs font-bold text-red-500 mb-1">
+              <label className="block text-xs font-bold text-red-600 dark:text-red-400 mb-1 mt-2">
                 الوزن بالكيلو (للقوة النسبية والتغذية)
               </label>
               <input
@@ -457,20 +459,19 @@ export default function AssessmentTab({
                 onChange={(e) =>
                   setPlayerData({ ...playerData, bodyweight: e.target.value })
                 }
-                className="w-full p-2.5 rounded-lg border border-red-300 bg-red-50 focus:ring-2 focus:outline-none md:w-1/5 font-bold"
+                className={`w-full p-2.5 rounded-lg border focus:ring-2 focus:outline-none md:w-1/5 font-bold transition-colors bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700 text-slate-900 dark:text-white placeholder-red-300 dark:placeholder-red-700`}
                 placeholder="KG"
               />
             </div>
           </div>
 
-          {/* 🌟 القسم الجديد: المحددات الفسيولوجية والتغذية */}
-          <h3 className="font-bold mb-4 mt-8 flex items-center gap-2">
+          <h3 className="font-bold mb-4 mt-8 flex items-center gap-2 text-slate-800 dark:text-white">
             <Flame className="w-5 h-5 text-orange-500" /> المحددات الفسيولوجية
             (للتغذية)
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-orange-50 border border-orange-200 p-4 rounded-xl">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-800/30 p-4 rounded-xl">
             <div>
-              <label className="block text-xs font-bold mb-1 text-orange-800">
+              <label className="block text-xs font-bold mb-1 text-orange-800 dark:text-orange-400">
                 نسبة الدهون (%) - اختياري
               </label>
               <input
@@ -479,12 +480,12 @@ export default function AssessmentTab({
                 onChange={(e) =>
                   setPlayerData({ ...playerData, bodyFat: e.target.value })
                 }
-                className="w-full p-2.5 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:outline-none font-bold"
+                className="w-full p-2.5 rounded-lg border border-orange-300 dark:border-orange-700/50 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:outline-none font-bold"
                 placeholder="مثال: 15"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold mb-1 text-orange-800">
+              <label className="block text-xs font-bold mb-1 text-orange-800 dark:text-orange-400">
                 الهدف (Goal)
               </label>
               <select
@@ -492,7 +493,7 @@ export default function AssessmentTab({
                 onChange={(e) =>
                   setPlayerData({ ...playerData, goal: e.target.value })
                 }
-                className="w-full p-2.5 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:outline-none font-bold text-slate-700"
+                className="w-full p-2.5 rounded-lg border border-orange-300 dark:border-orange-700/50 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:outline-none font-bold"
               >
                 <option value="lose">خسارة دهون (Deficit)</option>
                 <option value="maintain">
@@ -502,7 +503,7 @@ export default function AssessmentTab({
               </select>
             </div>
             <div>
-              <label className="block text-xs font-bold mb-1 text-orange-800">
+              <label className="block text-xs font-bold mb-1 text-orange-800 dark:text-orange-400">
                 أيام التمرين / أسبوع
               </label>
               <select
@@ -510,7 +511,7 @@ export default function AssessmentTab({
                 onChange={(e) =>
                   setPlayerData({ ...playerData, trainingDays: e.target.value })
                 }
-                className="w-full p-2.5 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:outline-none font-bold text-slate-700"
+                className="w-full p-2.5 rounded-lg border border-orange-300 dark:border-orange-700/50 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:outline-none font-bold"
               >
                 {[1, 2, 3, 4, 5, 6, 7].map((d) => (
                   <option key={d} value={d}>
@@ -520,7 +521,7 @@ export default function AssessmentTab({
               </select>
             </div>
             <div>
-              <label className="block text-xs font-bold mb-1 text-orange-800">
+              <label className="block text-xs font-bold mb-1 text-orange-800 dark:text-orange-400">
                 متوسط شدة التمرين
               </label>
               <select
@@ -528,7 +529,7 @@ export default function AssessmentTab({
                 onChange={(e) =>
                   setPlayerData({ ...playerData, intensity: e.target.value })
                 }
-                className="w-full p-2.5 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:outline-none font-bold text-slate-700"
+                className="w-full p-2.5 rounded-lg border border-orange-300 dark:border-orange-700/50 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:outline-none font-bold"
               >
                 <option value="low">خفيفة (تأهيل/صيانة)</option>
                 <option value="medium">متوسطة (تدريب معتاد)</option>
@@ -537,17 +538,17 @@ export default function AssessmentTab({
             </div>
           </div>
 
-          <h3 className="font-bold mb-4 mt-8 flex items-center gap-2">
-            <ClipboardCheck className="w-5 h-5" /> إدخال نتائج الاختبارات
+          <h3 className="font-bold mb-4 mt-8 flex items-center gap-2 text-slate-800 dark:text-white border-b border-slate-200 dark:border-slate-700 pb-2">
+            <ClipboardCheck className="w-5 h-5 text-emerald-500" /> إدخال نتائج الاختبارات
           </h3>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div className="space-y-4 bg-white p-4 rounded-xl border border-slate-200">
-              <h4 className="text-sm font-bold text-blue-800 border-b pb-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+            <div className="space-y-4 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+              <h4 className="text-sm font-bold text-blue-800 dark:text-blue-400 border-b border-slate-100 dark:border-slate-700 pb-2">
                 السرعة والقوة الانفجارية
               </h4>
-              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 p-1 rounded transition-colors">
-                <label className="text-sm font-bold">الوثب العمودي (cm)</label>
+              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 p-1 rounded transition-colors">
+                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">الوثب العمودي (cm)</label>
                 <input
                   type="number"
                   value={testScores.verticalJump}
@@ -557,12 +558,13 @@ export default function AssessmentTab({
                       verticalJump: e.target.value,
                     })
                   }
-                  className="w-24 p-2 text-center rounded border font-semibold"
+                  className="w-24 p-2 text-center rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-blue-500"
+                  placeholder="0"
                 />
               </div>
-              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 p-1 rounded transition-colors">
+              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 p-1 rounded transition-colors">
                 <div className="flex flex-col">
-                  <label className="text-sm font-bold">الوثب العريض</label>
+                  <label className="text-sm font-bold text-slate-700 dark:text-slate-300">الوثب العريض</label>
                   <span className="text-[10px] text-red-500 font-bold">
                     بالمتر (مثال: 2.8)
                   </span>
@@ -574,11 +576,12 @@ export default function AssessmentTab({
                   onChange={(e) =>
                     setTestScores({ ...testScores, broadJump: e.target.value })
                   }
-                  className="w-24 p-2 text-center rounded border font-semibold bg-red-50"
+                  className="w-24 p-2 text-center rounded-lg border border-red-200 dark:border-red-800/50 bg-red-50 dark:bg-red-900/20 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-red-500"
+                  placeholder="0.00"
                 />
               </div>
-              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 p-1 rounded transition-colors">
-                <label className="text-sm font-bold">تسارع 10 متر (sec)</label>
+              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 p-1 rounded transition-colors">
+                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">تسارع 10 متر (sec)</label>
                 <input
                   type="number"
                   step="0.01"
@@ -586,11 +589,12 @@ export default function AssessmentTab({
                   onChange={(e) =>
                     setTestScores({ ...testScores, sprint10m: e.target.value })
                   }
-                  className="w-24 p-2 text-center rounded border font-semibold"
+                  className="w-24 p-2 text-center rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-blue-500"
+                  placeholder="0.00"
                 />
               </div>
-              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 p-1 rounded transition-colors">
-                <label className="text-sm font-bold">
+              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 p-1 rounded transition-colors">
+                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">
                   الرشاقة 5-10-5 (sec)
                 </label>
                 <input
@@ -600,31 +604,33 @@ export default function AssessmentTab({
                   onChange={(e) =>
                     setTestScores({ ...testScores, proAgility: e.target.value })
                   }
-                  className="w-24 p-2 text-center rounded border font-semibold"
+                  className="w-24 p-2 text-center rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-blue-500"
+                  placeholder="0.00"
                 />
               </div>
             </div>
 
-            <div className="space-y-4 bg-white p-4 rounded-xl border border-slate-200">
-              <h4 className="text-sm font-bold text-red-800 border-b pb-2">
+            <div className="space-y-4 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+              <h4 className="text-sm font-bold text-red-800 dark:text-red-400 border-b border-slate-100 dark:border-slate-700 pb-2">
                 القوة القصوى (1RM)
               </h4>
-              <p className="text-[10px] text-slate-500 mb-2">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2">
                 سيتم قسمتها على وزن اللاعب تلقائياً.
               </p>
-              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 p-1 rounded transition-colors">
-                <label className="text-sm font-bold">Squat 1RM (KG)</label>
+              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 p-1 rounded transition-colors">
+                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Squat 1RM (KG)</label>
                 <input
                   type="number"
                   value={testScores.squat1RM}
                   onChange={(e) =>
                     setTestScores({ ...testScores, squat1RM: e.target.value })
                   }
-                  className="w-24 p-2 text-center rounded border font-semibold"
+                  className="w-24 p-2 text-center rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-red-500"
+                  placeholder="0"
                 />
               </div>
-              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 p-1 rounded transition-colors">
-                <label className="text-sm font-bold">
+              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 p-1 rounded transition-colors">
+                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">
                   Bench Press 1RM (KG)
                 </label>
                 <input
@@ -633,11 +639,12 @@ export default function AssessmentTab({
                   onChange={(e) =>
                     setTestScores({ ...testScores, bench1RM: e.target.value })
                   }
-                  className="w-24 p-2 text-center rounded border font-semibold"
+                  className="w-24 p-2 text-center rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-red-500"
+                  placeholder="0"
                 />
               </div>
-              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 p-1 rounded transition-colors">
-                <label className="text-sm font-bold">
+              <div className="flex justify-between items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 p-1 rounded transition-colors">
+                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">
                   Power Clean 1RM (KG)
                 </label>
                 <input
@@ -646,17 +653,18 @@ export default function AssessmentTab({
                   onChange={(e) =>
                     setTestScores({ ...testScores, clean1RM: e.target.value })
                   }
-                  className="w-24 p-2 text-center rounded border font-semibold"
+                  className="w-24 p-2 text-center rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-red-500"
+                  placeholder="0"
                 />
               </div>
             </div>
 
-            <div className="space-y-4 bg-purple-50/50 p-4 rounded-xl border border-purple-200 lg:col-span-2">
-              <h4 className="text-sm font-black text-purple-800 border-b border-purple-200 pb-2 flex items-center gap-2">
+            <div className="space-y-4 bg-purple-50/50 dark:bg-purple-900/10 p-4 rounded-xl border border-purple-200 dark:border-purple-800/30 lg:col-span-2">
+              <h4 className="text-sm font-black text-purple-800 dark:text-purple-300 border-b border-purple-200 dark:border-purple-800/30 pb-2 flex items-center gap-2">
                 <Activity className="w-4 h-4" /> تقييم الحركة الوظيفية (FMS
                 Score)
               </h4>
-              <p className="text-[10px] text-purple-600 mb-2 font-bold">
+              <p className="text-[10px] text-purple-600 dark:text-purple-400 mb-2 font-bold">
                 قيّم كل حركة من 0 إلى 3 (المجموع من 21).
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -671,9 +679,9 @@ export default function AssessmentTab({
                 ].map((test) => (
                   <div
                     key={test.id}
-                    className="flex flex-col gap-1 bg-white p-2 rounded-lg border border-purple-100 shadow-sm"
+                    className="flex flex-col gap-1 bg-white dark:bg-slate-800 p-2 rounded-lg border border-purple-100 dark:border-purple-800/30 shadow-sm"
                   >
-                    <label className="text-xs font-bold text-slate-700">
+                    <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
                       {test.label}
                     </label>
                     <select
@@ -684,7 +692,7 @@ export default function AssessmentTab({
                           [test.id]: e.target.value,
                         })
                       }
-                      className="w-full p-1.5 text-center font-bold bg-slate-50 border border-slate-200 rounded outline-none focus:ring-1 focus:ring-purple-400"
+                      className="w-full p-1.5 text-center font-bold bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded outline-none focus:ring-1 focus:ring-purple-400"
                     >
                       <option value="3">3 - حركة مثالية</option>
                       <option value="2">2 - تعويض حركي</option>
@@ -902,8 +910,8 @@ export default function AssessmentTab({
           )}
         </div>
 
-        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 mt-8 text-slate-800">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-200 pb-4 mb-6 gap-4">
+        <div className="bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 mt-8 text-slate-800 dark:text-slate-100">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4 mb-6 gap-4">
             <h3 className="font-bold flex items-center gap-2">
               <Database className={`w-5 h-5 ${theme.headerIcon}`} /> أرشيف
               اللاعبين
@@ -920,7 +928,7 @@ export default function AssessmentTab({
                 placeholder="ابحث عن لاعب..."
                 value={archiveSearch}
                 onChange={(e) => setArchiveSearch(e.target.value)}
-                className="w-full pl-4 pr-9 py-2 rounded-xl border border-slate-300 focus:border-blue-500 outline-none text-sm font-bold bg-white shadow-inner"
+                className="w-full pl-4 pr-9 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:border-blue-500 outline-none text-sm font-bold shadow-inner placeholder-slate-400 dark:placeholder-slate-500"
               />
             </div>
           </div>
@@ -948,7 +956,7 @@ export default function AssessmentTab({
                 return (
                   <div
                     key={record.id}
-                    className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3"
+                    className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3"
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex items-center gap-3">
@@ -958,16 +966,16 @@ export default function AssessmentTab({
                           {record.playerData.name.charAt(0)}
                         </div>
                         <div>
-                          <h4 className="font-bold text-sm line-clamp-1">
+                          <h4 className="font-bold text-sm line-clamp-1 dark:text-white">
                             {record.playerData.name}
                           </h4>
-                          <div className="flex items-center gap-1 mt-1 text-[10px] text-slate-500 font-bold">
-                            <span className="bg-slate-100 px-1.5 py-0.5 rounded">
+                          <div className="flex items-center gap-1 mt-1 text-[10px] text-slate-500 dark:text-slate-400 font-bold">
+                            <span className="bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">
                               {record.playerData.birthYear
                                 ? `مواليد ${record.playerData.birthYear}`
                                 : displayAge || 'غير محدد'}
                             </span>
-                            <span className="bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded">
+                            <span className="bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 px-1.5 py-0.5 rounded">
                               {record.date}
                             </span>
                           </div>
@@ -975,7 +983,7 @@ export default function AssessmentTab({
                       </div>
                       <button
                         onClick={() => deleteFromDatabase(record.id)}
-                        className="text-slate-300 hover:text-red-500 transition-colors p-1"
+                        className="text-slate-300 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 transition-colors p-1"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
